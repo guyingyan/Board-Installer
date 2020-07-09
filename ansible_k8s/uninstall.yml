@@ -1,0 +1,9 @@
+---
+- hosts: masters,nodes
+  roles:
+    - reset_k8s
+    - uninstall
+    - uninstall_cloudcore
+- hosts: edges
+  roles: 
+    - uninstall_edgecore
