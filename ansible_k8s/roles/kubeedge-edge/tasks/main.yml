@@ -6,21 +6,11 @@
   ignore_errors: True
 
 - name: copy image to localion
-  copy: src={{role_path}}/../../pre-env/images/kubeedge-{{ansible_architecture}}.tar dest={{docker_image_dir}}
-
-- name: add arm or amd to add_host
-  add_host:
-    name: "{{master_ip_address}}"
-    arch_name: "amd"
-  when: (ansible_architecture) == "x86_64"
-
-
-- name: add arm or amd to add_host
-  add_host:
-    name: "{{master_ip_address}}"
-    arch_name: "arm"
-  when: (ansible_architecture) == "aarch64"
-
+  copy: src={{role_path}}/../../pre-env/images/{{item}} dest={{docker_image_dir}}
+  with_items: 
+    - kubeedge-{{ansible_architecture}}.tar
+    - node-exporter-{{ansible_architecture}}.tar
+    - cadvisor-{{ansible_architecture}}.tar
 
 - name: create directory to save deb package
   shell: mkdir -p /tmp/deb
@@ -83,6 +73,24 @@
 - name: copy edgecore
   template: src={{role_path}}/templates/edgecore.service dest=/usr/lib/systemd/system mode=755
 
+- name: add arm or amd to add_host
+  shell: sed -i 's/EDGE_ARCH/amd/g' /usr/lib/systemd/system/edgecore.service
+  when: (ansible_architecture) == "x86_64"
+
+
+- name: add arm or amd to add_host
+  shell: sed -i 's/EDGE_ARCH/arm/g' /usr/lib/systemd/system/edgecore.service
+  when: (ansible_architecture) == "aarch64"
+
+- name: start docker
+  service: name=docker enabled=yes state=started
+
+- name: config daemon.json file
+  template: src={{role_path}}/templates/daemon.json dest=/etc/docker/daemon.json
+
+- name: restart docker
+  service: name=docker enabled=yes state=stopped
+
 - name: systemctl daemon-reload
   shell: systemctl daemon-reload
 
@@ -90,7 +98,10 @@
   shell: systemctl restart docker && systemctl enable docker
 
 - name: load image
-  shell: docker load -i {{docker_image_dir}}/kubeedge-{{ansible_architecture}}.tar
+  shell: docker load -i {{docker_image_dir}}/{{item}}-{{ansible_architecture}}.tar
+  with_items:
+    - "kubeedge"
+    - "cadvisor"
 
 - name: systemctl start edgecore.service && systemctl start edgecore.service
   shell: systemctl start edgecore.service && systemctl enable edgecore.service

@@ -1,0 +1,8 @@
+---
+- name: stop cloudcore
+  fail: msg="don't install registry on the nodes"
+  when: (registry_ip_address) in (groups['nodes']) or (registry_ip_address) in (groups['edges']) 
+- name: stop cloudcore
+  fail: msg="please config gitlab ip"
+  when: groups.gitlab|length == 0 
+

@@ -1,0 +1,14 @@
+---
+- name: gitlab image directroy
+  file: path=/tmp/gitlab state=directory
+
+- name: copy gitlab.rb to /root
+  template: src={{role_path}}/templates/gitlab.rb dest=/root
+
+
+- name: copy jdk 
+  copy: src={{role_path}}/../../pre-env/gitlab.tar.gz dest=/tmp/gitlab
+
+- name: load docker image
+  shell: docker load -i /tmp/gitlab/gitlab.tar.gz
+

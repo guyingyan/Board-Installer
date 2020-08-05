@@ -26,6 +26,10 @@
 - name: copy cloudcore.service to /usr/lib/systemd/system 
   template: src={{role_path}}/templates/cloudcore.service dest=/usr/lib/systemd/system mode=755
 
+- name: systemctl stop cloudcore.service 
+  shell: systemctl stop cloudcore.service 
+  ignore_errors: yes
+
 - name: systemctl daemon-reload
   shell: systemctl daemon-reload
 
