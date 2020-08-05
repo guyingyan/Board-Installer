@@ -13,9 +13,11 @@
     - "cadvisor.yaml"
     - "prometheus.yaml"
     - "prometheus2.yaml"
+  when: ansible_default_ipv4.address == (master_ip_address)
  
 - name: copy init file
   copy: src={{role_path}}/files/init.sh dest=/var/lib/yaml/init.sh mode=755
+  when: ansible_default_ipv4.address == (master_ip_address)
 
 - name: kubectl create -f tiller
   shell: kubectl create -f /var/lib/yaml/{{item}}
@@ -27,4 +29,5 @@
     - "cadvisor.yaml"
     - "prometheus.yaml"
     - "prometheus2.yaml"
+  when: ansible_default_ipv4.address == (master_ip_address)
     

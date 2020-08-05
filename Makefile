@@ -34,10 +34,10 @@ tar:
 	@echo $(DOCKERCMD)
 	@echo $(DOCKERBUILD)
 	@echo $(DOCKERPULL)
-	@curl -O "http://repo.inspur.com/artifactory/k8s-deploy-script/pre-env.tar.gz"
-	@$(TARCMD) zxvf pre-env.tar.gz -C ansible_k8s
+#	@curl -O "http://repo.inspur.com/artifactory/k8s-deploy-script/pre-env-v1.18.3.tar.gz"
+#	@$(TARCMD) zxvf pre-env-v1.18.3.tar.gz -C ansible_k8s
 	@curl  -o ansible_k8s/roles/git/files/travis_yml_script.rb --location --request GET 'http://open.inspur.com/api/v4/projects/56/repository/files/tools%2Ftravis_yml_script%2Erb/raw?ref=dev' --header 'Authorization: QknjuywWvquas7xoj2eN'
-	@$(TARCMD) -zcvf $(PKGNAME)-offline-$(VERSIONTAG).tgz $(PKGTEMPPATH)
+	@$(TARCMD) -zcvf $(PKGNAME)-offline-$(VERSIONTAG).tar.gz $(PKGTEMPPATH)
 image:
 	@echo $(DOCKERCMD)
 	@echo $(DOCKERBUILD)

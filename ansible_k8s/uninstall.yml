@@ -6,4 +6,4 @@
     - uninstall_cloudcore
 - hosts: edges
   roles: 
-    - uninstall_edgecore
+    - {role: uninstall_edgecore, tags: edge} 

@@ -2,6 +2,7 @@
 - hosts: all
   roles:
     - {role: set_fact}
+    - {role: check}
     - {role: hostname}
     - {role: repo}
 
@@ -34,6 +35,7 @@
     - {role: istio.node, tags: istio}
 - hosts: masters
   roles:
+    - {role: multi_master_commen,  when: groups.masters|length > 1}
     - {role: ntpd-server}
     - {role: master}
     - {role: helm}
@@ -59,15 +61,6 @@
 
 - hosts: masters
   roles:
-    - {role: kubeedge-cloud, tags: edge}
-    - {role: addtoken, tags: edge}
-- hosts: edges
-  roles:
-   - {role: kubeedge-edge, tags: edge}
-
-
-- hosts: masters
-  roles:
     - {role: cordon}
 
 - hosts: board
@@ -77,8 +70,25 @@
     - {role: docker-compose, tags: board}
 - hosts: jenkins_node
   roles:
+    - {role: common}
+    - {role: docker}
     - {role: git}
 
 - hosts: masters
   roles:
-    - {role: noschedul_edge, tags: edge}
+    - {role: kubeedge-cloud, tags: edge}
+    - {role: addtoken, tags: edge}
+- hosts: edges
+  roles:
+   - {role: hostname, tags: edge}
+   - {role: kubeedge-edge, tags: edge}
+
+- hosts: masters
+  roles:
+    - {role: restart-edgecloud, tags: edge}
+#    - {role: noschedul_edge, tags: edge}
+- hosts: gitlab
+  roles:
+    - {role: common}
+    - {role: docker}
+    - {role: gitlab}

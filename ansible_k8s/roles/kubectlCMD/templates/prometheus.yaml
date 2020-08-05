@@ -550,6 +550,9 @@ spec:
         heritage: Tiller
     spec:
       serviceAccountName: prometheus-node-exporter
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
       containers:
         - name: prometheus-node-exporter
           image: "prom/node-exporter:v1.0.0"
