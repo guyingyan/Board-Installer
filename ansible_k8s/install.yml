@@ -87,8 +87,3 @@
   roles:
     - {role: restart-edgecloud, tags: edge}
 #    - {role: noschedul_edge, tags: edge}
-- hosts: gitlab
-  roles:
-    - {role: common}
-    - {role: docker}
-    - {role: gitlab}
