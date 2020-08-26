@@ -10,10 +10,10 @@ echo ${ADMIN_SERVER_PORT} >> ${log}
 echo ${INSTALL_FILE} >> ${log}
 echo ${HOSTS_FILE} >> ${log}
 echo ${LOG_ID} >>${log}
+echo ${TOKEN} >>${log}
+
 cd /ansible_k8s
 ansible-playbook -i $hosts_dir/${HOSTS_FILE} ${INSTALL_FILE}.yml >> ${log}
-
-
 
 #ADMIN_SERVER_IP=10.110.25.227
 #ADMIN_SERVER_PORT=8080
@@ -23,10 +23,14 @@ ansible-playbook -i $hosts_dir/${HOSTS_FILE} ${INSTALL_FILE}.yml >> ${log}
 #log_name=1584435991.log
 result=$?
 
+echo curl -X PUT \
+  http://$ADMIN_SERVER_IP:$ADMIN_SERVER_PORT/v1/admin/node/callback \
+  -H ''token:${TOKEN}'' \
+  -H 'Content-Type: application/json' \
+  -d '{"log_id": '$LOG_ID', "ip": "'"$NODE_IP"'", "install_file": "'"$INSTALL_FILE"'","log_file": "'"$log_name"'","success": '$result'}' 
 
 curl -X PUT \
   http://$ADMIN_SERVER_IP:$ADMIN_SERVER_PORT/v1/admin/node/callback \
+  -H ''token:${TOKEN}'' \
   -H 'Content-Type: application/json' \
   -d '{"log_id": '$LOG_ID', "ip": "'"$NODE_IP"'", "install_file": "'"$INSTALL_FILE"'","log_file": "'"$log_name"'","success": '$result'}'
-
-#ansible-playbook -i hostsdir/${HOST_FILE} ${YML_FILE}.yml >> /tmp/t.txt

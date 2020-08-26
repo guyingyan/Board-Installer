@@ -3437,13 +3437,21 @@ spec:
         kubernetes.io/os: linux
       hostNetwork: true
       tolerations:
-        # Make sure calico-node gets scheduled on all nodes.
-        - effect: NoSchedule
-          operator: Exists
-        # Mark the pod as a critical add-on for rescheduling.
         - key: CriticalAddonsOnly
           operator: Exists
-        - effect: NoExecute
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+        - key: node.kubernetes.io/unschedulable
+          operator: Exists
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+        - key: node.kubernetes.io/out-of-disk
+          operator: Exists
+        - key: node.kubernetes.io/memory-pressure
+          operator: Exists
+        - key: node.kubernetes.io/network-unavailable
           operator: Exists
       serviceAccountName: calico-node
       # Minimize downtime during a rolling upgrade or deletion; tell Kubernetes to do a "force
@@ -3592,6 +3600,9 @@ spec:
               value: "info"
             - name: FELIX_HEALTHENABLED
               value: "true"
+            - name: IP_AUTODETECTION_METHOD
+              value: {% if virt_ip=='s' %}can-reach={{master_ip_address}}{% else %}can-reach={{virt_ip}}{% endif %}
+
           securityContext:
             privileged: true
           resources:
@@ -3702,11 +3713,22 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       tolerations:
-        # Mark the pod as a critical add-on for rescheduling.
         - key: CriticalAddonsOnly
           operator: Exists
         - key: node-role.kubernetes.io/master
-          effect: NoSchedule
+          operator: Exists
+        - key: node.kubernetes.io/unschedulable
+          operator: Exists
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+        - key: node.kubernetes.io/out-of-disk
+          operator: Exists
+        - key: node.kubernetes.io/memory-pressure
+          operator: Exists
+        - key: node.kubernetes.io/network-unavailable
+          operator: Exists
       serviceAccountName: calico-kube-controllers
       priorityClassName: system-cluster-critical
       containers:

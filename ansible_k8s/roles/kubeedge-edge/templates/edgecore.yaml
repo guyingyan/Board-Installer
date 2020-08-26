@@ -64,7 +64,7 @@ modules:
     enable: true
     enableMetrics: true
     gpuPluginEnabled: false
-    hostnameOverride: {{ansible_nodename}}
+    hostnameOverride: {{ansible_default_ipv4.address}}
     imageGCHighThreshold: 80
     imageGCLowThreshold: 40
     imagePullProgressDeadline: 60

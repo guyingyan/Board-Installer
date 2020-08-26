@@ -20,6 +20,8 @@
     - "/etc/docker"
     - "/var/lib/etcd"
     - "/tmp/t.sh"
-#- name: create /var/lib/yaml
-#  shell: mkdir -p /var/lib/yaml
-
+    - "/tmp/rpm"
+    - "/etc/kubernetes/"
+- name: delete float ip
+  shell: ip addr del {{virt_ip}} dev {{ansible_default_ipv4.alias}} 
+  ignore_errors: yes
