@@ -38,15 +38,4 @@ heapster_influxip: 10.254.0.100
 heapster_nodeport: 31888
 
 
-credential_private_key:
-
-arch: pause-arm64
-
-kubeedge_version: v1.3.1
-kubernetesVersion: v1.18.3
-
-float_ip: 192.168.122.101
-
-# select k8s network: flannel or calico
-k8s_network: flannel
-#k8s_network: calico
+credential_private_key: 

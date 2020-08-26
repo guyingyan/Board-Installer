@@ -1,14 +1,5 @@
 ---
-
 - name: kubectl cordon mast
-  set_fact: na={{ansible_nodename}}
-- name:
-  debug: msg="{{corn_na}}"
-
-- name: cn
-  debug: msg="{{na}}"
-
-- name: kubectl cordon master
-  shell: kubectl cordon `hostname --fqdn`
+  shell: kubectl cordon {{master_ip_address}}
 
 
