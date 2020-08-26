@@ -551,8 +551,10 @@ spec:
     spec:
       serviceAccountName: prometheus-node-exporter
       tolerations:
-        - operator: Exists
-          effect: NoSchedule
+        - effect: NoSchedule
+          key: node.kubernetes.io/unschedulable
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
       containers:
         - name: prometheus-node-exporter
           image: "prom/node-exporter:v1.0.0"

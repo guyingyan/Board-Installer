@@ -16,7 +16,7 @@ spec:
     image: {{registry_ip_address}}:5000/k8simage/osixia/keepalived:2.0.19
     env:
     - name: KEEPALIVED_VIRTUAL_IPS
-      value: {{float_ip}}        # 浮动 ip， 用于多 master 高可用
+      value: {{virt_ip}}        # 浮动 ip， 用于多 master 高可用
     - name: KEEPALIVED_INTERFACE
       value: {{ansible_default_ipv4['interface']}}
     - name: KEEPALIVED_UNICAST_PEERS

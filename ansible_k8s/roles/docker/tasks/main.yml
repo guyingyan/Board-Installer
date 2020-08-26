@@ -8,9 +8,12 @@
 - name: config daemon.json file
   template: src={{role_path}}/templates/daemon.json dest=/etc/docker/daemon.json
 
+- name: restart docker
+  service: name=docker enabled=yes state=stopped
+
 - name: systemctl daemon-reload
   shell: systemctl daemon-reload
 
 - name: restart docker
-  service: name=docker enabled=yes state=restarted
+  service: name=docker enabled=yes state=started
 

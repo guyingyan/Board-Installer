@@ -14,3 +14,7 @@
   roles:
     - kubeedge-edge
     #- 2k
+    #
+- hosts: masters
+  roles:
+    - {role: noschedul_edge, tags: edge}

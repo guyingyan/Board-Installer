@@ -2,10 +2,15 @@
 - hosts: all
   roles:
     - {role: set_fact}
+    - {role: check}
     - {role: hostname}
     - {role: repo}
+
+- hosts: masters,nodes,board,registry,registry,nfs-server
+  roles:
     - {role: common}
     - {role: chrony}
+
 - hosts: registry
   roles:
     - {role: docker}
@@ -26,10 +31,10 @@
     - {role: k8s}
     - {role: nfs-client}
     - {role: node}
-    - {role: dateLakeimages, tags: juy}
     - {role: istio.node, tags: istio}
 - hosts: masters
   roles:
+    - {role: multi_master_commen,  when: groups.masters|length > 1}
     - {role: ntpd-server}
     - {role: master}
     - {role: helm}
@@ -40,9 +45,6 @@
 - hosts: nodes
   roles:
     - {role: copy-addnode-cmd}
-- hosts: masters
-  roles:
-    - {role: dateLake, tags: juy}
 
 - hosts: nodes,master
   roles:
@@ -52,7 +54,11 @@
   roles:
     - {role: istio, tags: istio}
     - {role: heapster}
+
+- hosts: masters
+  roles:
     - {role: cordon}
+
 - hosts: board
   roles:
     - {role: docker}
@@ -60,6 +66,21 @@
     - {role: docker-compose, tags: board}
 - hosts: jenkins_node
   roles:
+    - {role: common}
+    - {role: docker}
     - {role: git}
 
+- hosts: masters
+  roles:
+    - {role: kubeedge-cloud, tags: edge}
+    - {role: addtoken, tags: edge}
+- hosts: edges
+  roles:
+   - {role: hostname, tags: edge}
+   - {role: kubeedge-edge, tags: edge}
 
+- hosts: masters
+  roles:
+    - {role: restart-edgecloud, tags: edge}
+    - {role: noschedul_edge, tags: edge}
+    - {role: noschedul}
