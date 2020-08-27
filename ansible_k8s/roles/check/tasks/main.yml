@@ -6,3 +6,6 @@
   fail: msg="please config more then 2 masters"
   when: groups.masters|length == 2
 
+- name: stop cloudcore
+  fail: msg="don't install jenkins node on the nodes"
+  when: (groups['jenkins_node'][0]) in (groups['nodes']) or (groups['jenkins_node'][0]) in (groups['edges'])
