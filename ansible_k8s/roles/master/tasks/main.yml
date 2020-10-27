@@ -25,8 +25,10 @@
 
 - name: start chronyd
   service: name=chronyd state=restarted
+  when: ansible_os_family == "RedHat"
 - name: start ntpd
   service: name=ntpd state=restarted
+  when: ansible_os_family == "RedHat"
 
 - name: kubeadm init --config k8s-init.yaml
   shell: kubeadm init --config /var/lib/yaml/k8s-init.yaml
@@ -79,7 +81,7 @@
   when: ansible_default_ipv4.address == (master_ip_address) and  groups.masters|length > 1
 
 
-- name: copy image to localion
+- name: copy master join.sh image to localion
   copy: src=/tmp/{{master_ip_address}}/tmp/join.sh dest=/tmp/ mode=755
   when: ansible_default_ipv4.address!=(master_ip_address) and  groups.masters|length > 1
 
