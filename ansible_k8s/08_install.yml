@@ -4,7 +4,7 @@
     - {role: set_fact}
     - {role: check}
     - {role: hostname}
-    - {role: repo, when: ansible_os_family == "RedHat"}
+    - {role: repo}
 
 - hosts: masters,nodes,board,registry,registry,nfs-server
   roles:
@@ -16,27 +16,26 @@
     - {role: docker}
     - {role: registry}
     - {role: push-images}
-    - {role: push-images-2}
 - hosts: nfs-server
   roles:
-    - {role: nfs-server, when: ansible_os_family == "RedHat"}
-    - {role: nfs-client, when: ansible_os_family == "RedHat"}
+    - {role: nfs-server}
+    - {role: nfs-client}
 - hosts: nodes,board,registry,nfs-server
   roles:
-    - {role: ntpd-client, when: ansible_os_family == "RedHat"}
+    - {role: ntpd-client}
 
 - hosts: masters,nodes
   roles:
     - {role: docker}
     - {role: load-k8s-images-master}
     - {role: k8s}
-    - {role: nfs-client, when: ansible_os_family == "RedHat"}
+    - {role: nfs-client}
     - {role: node}
     - {role: istio.node, tags: istio}
 - hosts: masters
   roles:
     - {role: multi_master_commen,  when: groups.masters|length > 1}
-    - {role: ntpd-server, when: ansible_os_family == "RedHat"}
+    - {role: ntpd-server}
     - {role: master}
     - {role: helm}
     - {role: kubectlCMD}
